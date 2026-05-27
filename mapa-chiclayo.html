@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Recursos - Distrito y Provincia de Chiclayo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f1729;
+            --bg-secondary: #1a2340;
+            --bg-card: rgba(26, 35, 64, 0.85);
+            --text-primary: #e8ecf4;
+            --text-secondary: #94a3c4;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-cyan: #06b6d4;
+            --accent-pink: #ec4899;
+            --edu-color: #6366f1;
+            --edu-light: rgba(99, 102, 241, 0.15);
+            --prod-color: #f59e0b;
+            --prod-light: rgba(245, 158, 11, 0.15);
+            --health-color: #10b981;
+            --health-light: rgba(16, 185, 129, 0.15);
+            --gov-color: #ef4444;
+            --gov-light: rgba(239, 68, 68, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .bg-animation .orb:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-blue), transparent);
+            top: -10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg-animation .orb:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-purple), transparent);
+            bottom: -10%;
+            right: -5%;
+            animation-delay: -7s;
+        }
+
+        .bg-animation .orb:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-cyan), transparent);
+            top: 50%;
+            left: 40%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.05); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-purple), transparent);
+            border-radius: 2px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #94a3c4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* Map Container */
+        .map-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--glass-border);
+        }
+
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 750px;
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 23, 41, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            max-width: 250px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip .tt-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+        }
+
+        .tooltip .tt-cat {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Legend */
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .legend-category {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .legend-category:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .legend-category h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-category h3 .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-item .symbol {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* Zone Analysis */
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .zone-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .zone-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .zone-card.high-resource {
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .zone-card.low-resource {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        .zone-card.medium-resource {
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .zone-card h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .zone-card .zone-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .zone-card.high-resource .zone-tag {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .zone-card.low-resource .zone-tag {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        .zone-card.medium-resource .zone-tag {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .zone-card p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Connections */
+        .connections-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 14px;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 0.82rem;
+            transition: all 0.3s ease;
+        }
+
+        .connection-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .connection-item .conn-from,
+        .connection-item .conn-to {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .connection-item .conn-arrow {
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .connection-item .conn-desc {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-left: auto;
+            font-style: italic;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* Map Controls */
+        .map-controls {
+            display: flex;
+            gap: 8px;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+        }
+
+        .map-btn {
+            padding: 6px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .map-btn:hover, .map-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .map-btn.edu-btn.active {
+            background: var(--edu-light);
+            border-color: var(--edu-color);
+        }
+
+        .map-btn.prod-btn.active {
+            background: var(--prod-light);
+            border-color: var(--prod-color);
+        }
+
+        .map-btn.health-btn.active {
+            background: var(--health-light);
+            border-color: var(--health-color);
+        }
+
+        .map-btn.gov-btn.active {
+            background: var(--gov-light);
+            border-color: var(--gov-color);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0 20px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .footer .divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 0 auto 15px;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white !important;
+                color: #1a1a1a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .bg-animation { display: none; }
+            .glass-card {
+                background: #f8f9fa !important;
+                border: 1px solid #ddd !important;
+                break-inside: avoid;
+            }
+            .map-container {
+                background: #fff !important;
+            }
+            .header h1 {
+                -webkit-text-fill-color: #1a1a1a;
+                background: none;
+            }
+            .stat-number {
+                -webkit-text-fill-color: #3b82f6;
+                background: none;
+            }
+        }
+
+        /* Pulse animation for resource dots */
+        @keyframes pulse {
+            0%, 100% { r: 6; opacity: 1; }
+            50% { r: 9; opacity: 0.7; }
+        }
+
+        @keyframes dash {
+            to { stroke-dashoffset: -20; }
+        }
+
+        .resource-dot {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resource-dot:hover {
+            filter: brightness(1.3) drop-shadow(0 0 8px currentColor);
+        }
+
+        .connection-line {
+            stroke-dasharray: 6, 4;
+            animation: dash 2s linear infinite;
+        }
+
+        /* District labels */
+        .district-label {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            fill: rgba(255, 255, 255, 0.15);
+            font-size: 14px;
+            text-anchor: middle;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .street-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            fill: rgba(255, 255, 255, 0.25);
+            font-size: 8px;
+            pointer-events: none;
+        }
+
+        /* Zona highlight */
+        .zone-highlight {
+            transition: all 0.3s ease;
+        }
+
+        .zone-highlight:hover {
+            fill-opacity: 0.15;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .legend-grid { grid-template-columns: 1fr; }
+            .zone-grid { grid-template-columns: 1fr; }
+            .connections-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="badge">📍 Análisis Territorial 2025</div>
+            <h1>Mapa de Recursos del Distrito y Provincia de Chiclayo</h1>
+            <h2>Región Lambayeque — Perú</h2>
+            <p class="subtitle">
+                Distribución territorial de recursos educativos y productivos/económicos. 
+                Identificación de zonas con alta concentración, carencias y oportunidades de articulación interinstitucional.
+            </p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">28</div>
+                <div class="stat-label">Recursos Educativos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Recursos Productivos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Recursos de Salud</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Instituciones Gubernamentales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">20</div>
+                <div class="stat-label">Distritos Mapeados</div>
+            </div>
+        </div>
+
+        <!-- Main Map -->
+        <div class="glass-card" style="padding: 0; overflow: hidden;">
+            <div class="map-controls">
+                <button class="map-btn active" onclick="toggleLayer('all', this)">🗺️ Todos</button>
+                <button class="map-btn edu-btn active" onclick="toggleLayer('edu', this)">🎓 Educación</button>
+                <button class="map-btn prod-btn active" onclick="toggleLayer('prod', this)">🏭 Productivos</button>
+                <button class="map-btn health-btn active" onclick="toggleLayer('health', this)">🏥 Salud</button>
+                <button class="map-btn gov-btn active" onclick="toggleLayer('gov', this)">🏛️ Gobierno</button>
+                <button class="map-btn" onclick="toggleLayer('connections', this)">🔗 Conexiones</button>
+                <button class="map-btn" onclick="toggleLayer('zones', this)">📊 Zonas</button>
+            </div>
+            <div class="map-container">
+                <div class="map-wrapper">
+                    <svg id="mainMap" viewBox="0 0 1200 800" class="map-svg" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- Gradients -->
+                            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0f1729" />
+                                <stop offset="100%" style="stop-color:#1a2340" />
+                            </linearGradient>
+                            <linearGradient id="roadGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:rgba(255,255,255,0.08)" />
+                                <stop offset="50%" style="stop-color:rgba(255,255,255,0.15)" />
+                                <stop offset="100%" style="stop-color:rgba(255,255,255,0.08)" />
+                            </linearGradient>
+                            <!-- Glow filters -->
+                            <filter id="glowEdu">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feFlood flood-color="#6366f1" flood-opacity="0.5"/>
+                                <feComposite in2="blur" operator="in"/>
+                                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <filter id="glowProd">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feFlood flood-color="#f59e0b" flood-opacity="0.5"/>
+                                <feComposite in2="blur" operator="in"/>
+                                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <filter id="glowHealth">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feFlood flood-color="#10b981" flood-opacity="0.5"/>
+                                <feComposite in2="blur" operator="in"/>
+                                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <filter id="glowGov">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feFlood flood-color="#ef4444" flood-opacity="0.5"/>
+                                <feComposite in2="blur" operator="in"/>
+                                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                            <filter id="shadow">
+                                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                            </filter>
+                            <!-- Zone patterns -->
+                            <pattern id="highZone" patternUnits="userSpaceOnUse" width="10" height="10">
+                                <circle cx="5" cy="5" r="1" fill="rgba(16, 185, 129, 0.3)"/>
+                            </pattern>
+                            <pattern id="lowZone" patternUnits="userSpaceOnUse" width="10" height="10">
+                                <line x1="0" y1="10" x2="10" y2="0" stroke="rgba(239, 68, 68, 0.2)" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+
+                        <!-- Background -->
+                        <rect width="1200" height="800" fill="url(#bgGrad)"/>
+
+                        <!-- Grid lines (subtle) -->
+                        <g opacity="0.03">
+                            <line x1="0" y1="100" x2="1200" y2="100" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="300" x2="1200" y2="300" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="500" x2="1200" y2="500" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="600" x2="1200" y2="600" stroke="white" stroke-width="0.5"/>
+                            <line x1="0" y1="700" x2="1200" y2="700" stroke="white" stroke-width="0.5"/>
+                            <line x1="200" y1="0" x2="200" y2="800" stroke="white" stroke-width="0.5"/>
+                            <line x1="400" y1="0" x2="400" y2="800" stroke="white" stroke-width="0.5"/>
+                            <line x1="600" y1="0" x2="600" y2="800" stroke="white" stroke-width="0.5"/>
+                            <line x1="800" y1="0" x2="800" y2="800" stroke="white" stroke-width="0.5"/>
+                            <line x1="1000" y1="0" x2="1000" y2="800" stroke="white" stroke-width="0.5"/>
+                        </g>
+
+                        <!-- ============= PROVINCE OUTLINE ============= -->
+                        <g id="provinceOutline">
+                            <!-- Provincia de Chiclayo - forma general -->
+                            <path d="M 150,120 L 350,60 L 580,40 L 820,55 L 1020,100 L 1100,200 L 1130,350 L 1100,520 L 1020,650 L 880,730 L 680,760 L 450,740 L 280,680 L 150,560 L 100,400 L 110,250 Z" 
+                                  fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="8,4"/>
+                        </g>
+
+                        <!-- ============= DISTRICT BOUNDARIES ============= -->
+                        <g id="districts" opacity="0.6">
+                            <!-- Chiclayo Centro -->
+                            <path d="M 420,280 L 580,260 L 700,290 L 720,420 L 640,480 L 480,470 L 400,380 Z" 
+                                  fill="rgba(99, 102, 241, 0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="560" y="375" class="district-label" font-size="16">Chiclayo</text>
+                            <text x="560" y="393" class="district-label" font-size="10">Centro</text>
+
+                            <!-- José Leonardo Ortiz -->
+                            <path d="M 400,140 L 580,130 L 620,260 L 480,270 L 420,280 L 380,220 Z" 
+                                  fill="rgba(245, 158, 11, 0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="500" y="205" class="district-label" font-size="12">José Leonardo</text>
+                            <text x="500" y="220" class="district-label" font-size="12">Ortiz</text>
+
+                            <!-- La Victoria -->
+                            <path d="M 580,130 L 740,150 L 720,290 L 700,290 L 580,260 L 620,260 Z" 
+                                  fill="rgba(236, 72, 153, 0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="660" y="215" class="district-label" font-size="12">La Victoria</text>
+
+                            <!-- Pimentel -->
+                            <path d="M 150,350 L 280,300 L 400,380 L 380,480 L 280,500 L 150,460 Z" 
+                                  fill="rgba(6, 182, 212, 0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="275" y="405" class="district-label" font-size="12">Pimentel</text>
+
+                            <!-- Lambayeque (referencia) -->
+                            <path d="M 200,80 L 400,60 L 400,140 L 380,220 L 280,220 L 180,180 Z" 
+                                  fill="rgba(16, 185, 129, 0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                            <text x="300" y="145" class="district-label" font-size="10">Hacia Lambayeque</text>
+
+                            <!-- Monsefú -->
+                            <path d="M 280,500 L 380,480 L 480,470 L 500,580 L 400,620 L 280,590 Z" 
+                                  fill="rgba(245, 158, 11, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="390" y="545" class="district-label" font-size="12">Monsefú</text>
+
+                            <!-- Santa Rosa -->
+                            <path d="M 100,460 L 150,460 L 280,500 L 280,590 L 180,610 L 100,550 Z" 
+                                  fill="rgba(6, 182, 212, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="185" y="540" class="district-label" font-size="10">Santa Rosa</text>
+
+                            <!-- Reque -->
+                            <path d="M 500,580 L 640,480 L 720,520 L 700,640 L 580,670 L 500,640 Z" 
+                                  fill="rgba(139, 92, 246, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="610" y="580" class="district-label" font-size="12">Reque</text>
+
+                            <!-- Pomalca -->
+                            <path d="M 720,290 L 900,250 L 960,350 L 920,440 L 720,420 Z" 
+                                  fill="rgba(245, 158, 11, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="820" y="355" class="district-label" font-size="12">Pomalca</text>
+
+                            <!-- Tumán -->
+                            <path d="M 900,250 L 1060,220 L 1100,350 L 1020,440 L 960,350 Z" 
+                                  fill="rgba(16, 185, 129, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="1010" y="330" class="district-label" font-size="12">Tumán</text>
+
+                            <!-- Pátapo -->
+                            <path d="M 900,100 L 1060,120 L 1060,220 L 900,250 L 840,180 Z" 
+                                  fill="rgba(99, 102, 241, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="970" y="175" class="district-label" font-size="12">Pátapo</text>
+
+                            <!-- Eten -->
+                            <path d="M 400,620 L 500,640 L 520,720 L 400,740 L 320,700 Z" 
+                                  fill="rgba(236, 72, 153, 0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                            <text x="430" y="690" class="district-label" font-size="10">Eten</text>
+
+                            <!-- Oyotún (referencia lejana) -->
+                            <path d="M 920,440 L 1020,440 L 1080,560 L 980,620 L 880,560 Z" 
+                                  fill="rgba(239, 68, 68, 0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                            <text x="980" y="520" class="district-label" font-size="10">Oyotún</text>
+                        </g>
+
+                        <!-- ============= MAIN ROADS ============= -->
+                        <g id="roads">
+                            <!-- Panamericana Norte -->
+                            <path d="M 300,50 L 380,160 L 470,280 L 530,380 L 520,500 L 480,620 L 460,750" 
+                                  fill="none" stroke="url(#roadGrad)" stroke-width="6" stroke-linecap="round"/>
+                            <text x="335" y="100" class="street-label" transform="rotate(-55, 335, 100)" font-size="9" fill="rgba(255,255,255,0.3)">PANAMERICANA NORTE</text>
+
+                            <!-- Av. Balta -->
+                            <path d="M 530,280 L 550,340 L 560,420 L 550,480" 
+                                  fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4" stroke-linecap="round"/>
+                            <text x="568" y="360" class="street-label" font-size="8">Av. Balta</text>
+
+                            <!-- Av. Sáenz Peña -->
+                            <path d="M 440,350 L 530,340 L 680,330 L 780,340" 
+                                  fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+                            <text x="600" y="325" class="street-label" font-size="8">Av. Sáenz Peña</text>
+
+                            <!-- Carretera a Pimentel -->
+                            <path d="M 460,380 L 370,400 L 280,410 L 170,420" 
+                                  fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+                            <text x="290" y="428" class="street-label" font-size="8">Carretera a Pimentel</text>
+
+                            <!-- Av. Leguía -->
+                            <path d="M 520,300 L 620,280 L 720,300" 
+                                  fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+                            <text x="620" y="275" class="street-label" font-size="8">Av. Leguía</text>
+
+                            <!-- Carretera a Pomalca -->
+                            <path d="M 680,340 L 780,340 L 860,320 L 950,310" 
+                                  fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+                            <text x="830" y="305" class="street-label" font-size="8">Carret. a Pomalca</text>
+
+                            <!-- Vía a JLO -->
+                            <path d="M 520,300 L 510,240 L 500,180 L 490,130" 
+                                  fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3" stroke-linecap="round"/>
+                            <text x="525" y="170" class="street-label" font-size="8">Av. Chiclayo</text>
+                        </g>
+
+                        <!-- ============= ZONE HIGHLIGHTS ============= -->
+                        <g id="zoneHighlights" class="zones-layer">
+                            <!-- High resource zone - Centro -->
+                            <ellipse cx="560" cy="360" rx="120" ry="80" fill="rgba(16, 185, 129, 0.06)" stroke="rgba(16, 185, 129, 0.2)" stroke-width="1" stroke-dasharray="4,3" class="zone-highlight"/>
+                            <text x="560" y="445" font-size="8" fill="rgba(16, 185, 129, 0.5)" text-anchor="middle" font-family="Inter" font-weight="600">ALTA CONCENTRACIÓN</text>
+
+                            <!-- Medium resource zone - JLO -->
+                            <ellipse cx="510" cy="195" rx="90" ry="55" fill="rgba(245, 158, 11, 0.05)" stroke="rgba(245, 158, 11, 0.15)" stroke-width="1" stroke-dasharray="4,3" class="zone-highlight"/>
+                            <text x="510" y="255" font-size="7" fill="rgba(245, 158, 11, 0.5)" text-anchor="middle" font-family="Inter" font-weight="600">CONCENTRACIÓN MEDIA</text>
+
+                            <!-- Low resource zone - Oyotún/rural -->
+                            <ellipse cx="980" cy="510" rx="80" ry="60" fill="rgba(239, 68, 68, 0.05)" stroke="rgba(239, 68, 68, 0.15)" stroke-width="1" stroke-dasharray="4,3" class="zone-highlight"/>
+                            <text x="980" y="575" font-size="7" fill="rgba(239, 68, 68, 0.5)" text-anchor="middle" font-family="Inter" font-weight="600">BAJA CONCENTRACIÓN</text>
+
+                            <!-- Low resource zone - Eten -->
+                            <ellipse cx="440" cy="690" rx="70" ry="45" fill="rgba(239, 68, 68, 0.05)" stroke="rgba(239, 68, 68, 0.15)" stroke-width="1" stroke-dasharray="4,3" class="zone-highlight"/>
+                            <text x="440" y="740" font-size="7" fill="rgba(239, 68, 68, 0.5)" text-anchor="middle" font-family="Inter" font-weight="600">BAJA CONCENTRACIÓN</text>
+
+                            <!-- Pimentel university zone -->
+                            <ellipse cx="275" cy="400" rx="80" ry="55" fill="rgba(99, 102, 241, 0.05)" stroke="rgba(99, 102, 241, 0.15)" stroke-width="1" stroke-dasharray="4,3" class="zone-highlight"/>
+                            <text x="275" y="460" font-size="7" fill="rgba(99, 102, 241, 0.5)" text-anchor="middle" font-family="Inter" font-weight="600">POLO UNIVERSITARIO</text>
+                        </g>
+
+                        <!-- ============= CONNECTIONS ============= -->
+                        <g id="connectionLines" class="connections-layer">
+                            <!-- UGEL - I.E. connections -->
+                            <line x1="610" y1="305" x2="530" y2="350" class="connection-line" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1.5"/>
+                            <line x1="610" y1="305" x2="670" y2="350" class="connection-line" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1.5"/>
+                            <line x1="610" y1="305" x2="500" y2="200" class="connection-line" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1.5"/>
+                            <line x1="610" y1="305" x2="660" y2="210" class="connection-line" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1.5"/>
+                            <line x1="610" y1="305" x2="850" y2="340" class="connection-line" stroke="rgba(99, 102, 241, 0.2)" stroke-width="1"/>
+
+                            <!-- Universidad - Empresa connections -->
+                            <line x1="280" y1="370" x2="480" y2="400" class="connection-line" stroke="rgba(6, 182, 212, 0.25)" stroke-width="1.5"/>
+                            <line x1="540" y1="305" x2="580" y2="410" class="connection-line" stroke="rgba(6, 182, 212, 0.25)" stroke-width="1.5"/>
+
+                            <!-- Hospital - Centro Salud connections -->
+                            <line x1="500" y1="370" x2="470" y2="195" class="connection-line" stroke="rgba(16, 185, 129, 0.25)" stroke-width="1.5"/>
+                            <line x1="500" y1="370" x2="640" y2="350" class="connection-line" stroke="rgba(16, 185, 129, 0.25)" stroke-width="1.5"/>
+
+                            <!-- Municipalidad - UGEL -->
+                            <line x1="560" y1="340" x2="610" y2="305" class="connection-line" stroke="rgba(239, 68, 68, 0.25)" stroke-width="1.5"/>
+
+                            <!-- Mercado - Zona Agrícola -->
+                            <line x1="520" y1="190" x2="870" y2="370" class="connection-line" stroke="rgba(245, 158, 11, 0.2)" stroke-width="1"/>
+                            <line x1="520" y1="190" x2="1010" y2="310" class="connection-line" stroke="rgba(245, 158, 11, 0.2)" stroke-width="1"/>
+                        </g>
+
+                        <!-- ============= RESOURCE MARKERS ============= -->
+                        
+                        <!-- === EDUCACIÓN (Violeta/Índigo) === -->
+                        <g class="edu-layer" filter="url(#glowEdu)">
+                            <!-- UGEL Chiclayo -->
+                            <g class="resource-dot" data-name="UGEL Chiclayo" data-cat="Educación" data-desc="Unidad de Gestión Educativa Local - Administra instituciones educativas del distrito">
+                                <rect x="600" y="294" width="22" height="22" rx="5" fill="#6366f1" opacity="0.9"/>
+                                <text x="611" y="309" text-anchor="middle" fill="white" font-size="11">🏫</text>
+                            </g>
+
+                            <!-- I.E. San José -->
+                            <g class="resource-dot" data-name="I.E. San José" data-cat="Educación" data-desc="Institución Educativa emblemática, nivel secundario">
+                                <circle cx="530" cy="350" r="7" fill="#6366f1" opacity="0.85"/>
+                                <text x="530" y="354" text-anchor="middle" fill="white" font-size="8">📚</text>
+                            </g>
+
+                            <!-- I.E. Karl Weiss -->
+                            <g class="resource-dot" data-name="I.E. Karl Weiss" data-cat="Educación" data-desc="Institución Educativa estatal de nivel secundario">
+                                <circle cx="670" cy="350" r="7" fill="#6366f1" opacity="0.85"/>
+                                <text x="670" y="354" text-anchor="middle" fill="white" font-size="8">📚</text>
+                            </g>
+
+                            <!-- I.E. Santa Magdalena Sofía -->
+                            <g class="resource-dot" data-name="I.E. Santa Magdalena Sofía" data-cat="Educación" data-desc="Institución Educativa femenina emblemática">
+                                <circle cx="580" cy="380" r="7" fill="#6366f1" opacity="0.85"/>
+                                <text x="580" y="384" text-anchor="middle" fill="white" font-size="8">📚</text>
+                            </g>
+
+                            <!-- I.E. Elvira García y García -->
+                            <g class="resource-dot" data-name="I.E. 11024 - JLO" data-cat="Educación" data-desc="Institución Educativa primaria en José Leonardo Ortiz">
+                                <circle cx="500" cy="200" r="6" fill="#6366f1" opacity="0.8"/>
+                                <text x="500" y="204" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- I.E. La Victoria -->
+                            <g class="resource-dot" data-name="I.E. Pedro A. Labarthe - La Victoria" data-cat="Educación" data-desc="Institución Educativa principal del distrito La Victoria">
+                                <circle cx="660" cy="210" r="6" fill="#6366f1" opacity="0.8"/>
+                                <text x="660" y="214" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- UNPRG -->
+                            <g class="resource-dot" data-name="Universidad Nacional Pedro Ruiz Gallo (UNPRG)" data-cat="Educación" data-desc="Universidad pública principal de Lambayeque - Investigación y formación profesional">
+                                <rect x="519" y="294" width="24" height="24" rx="6" fill="#4f46e5" opacity="0.95"/>
+                                <text x="531" y="310" text-anchor="middle" fill="white" font-size="12">🎓</text>
+                            </g>
+
+                            <!-- USAT -->
+                            <g class="resource-dot" data-name="Universidad Católica Santo Toribio de Mogrovejo (USAT)" data-cat="Educación" data-desc="Universidad privada - Campus en Chiclayo centro">
+                                <rect x="453" y="324" width="24" height="24" rx="6" fill="#4f46e5" opacity="0.95"/>
+                                <text x="465" y="340" text-anchor="middle" fill="white" font-size="12">🎓</text>
+                            </g>
+
+                            <!-- USS - Pimentel -->
+                            <g class="resource-dot" data-name="Universidad Señor de Sipán (USS)" data-cat="Educación" data-desc="Universidad privada - Campus principal en Pimentel">
+                                <rect x="258" y="358" width="24" height="24" rx="6" fill="#4f46e5" opacity="0.95"/>
+                                <text x="270" y="374" text-anchor="middle" fill="white" font-size="12">🎓</text>
+                            </g>
+
+                            <!-- UCV -->
+                            <g class="resource-dot" data-name="Universidad César Vallejo (UCV) - Chiclayo" data-cat="Educación" data-desc="Universidad privada - Filial Chiclayo">
+                                <rect x="300" y="388" width="24" height="24" rx="6" fill="#4f46e5" opacity="0.95"/>
+                                <text x="312" y="404" text-anchor="middle" fill="white" font-size="12">🎓</text>
+                            </g>
+
+                            <!-- UDCH -->
+                            <g class="resource-dot" data-name="Universidad de Chiclayo (UDCH)" data-cat="Educación" data-desc="Universidad privada ubicada en Chiclayo centro">
+                                <rect x="600" y="375" width="24" height="24" rx="6" fill="#4f46e5" opacity="0.95"/>
+                                <text x="612" y="391" text-anchor="middle" fill="white" font-size="12">🎓</text>
+                            </g>
+
+                            <!-- Instituto SENATI -->
+                            <g class="resource-dot" data-name="SENATI Chiclayo" data-cat="Educación" data-desc="Servicio Nacional de Adiestramiento en Trabajo Industrial">
+                                <rect x="680" y="275" width="20" height="20" rx="5" fill="#818cf8" opacity="0.85"/>
+                                <text x="690" y="289" text-anchor="middle" fill="white" font-size="9">🔧</text>
+                            </g>
+
+                            <!-- SENCICO -->
+                            <g class="resource-dot" data-name="SENCICO Chiclayo" data-cat="Educación" data-desc="Servicio Nacional de Capacitación para la Industria de la Construcción">
+                                <rect x="700" y="380" width="20" height="20" rx="5" fill="#818cf8" opacity="0.85"/>
+                                <text x="710" y="394" text-anchor="middle" fill="white" font-size="9">🔧</text>
+                            </g>
+
+                            <!-- Biblioteca Municipal -->
+                            <g class="resource-dot" data-name="Biblioteca Municipal de Chiclayo" data-cat="Educación" data-desc="Biblioteca pública del gobierno local">
+                                <circle cx="555" cy="360" r="6" fill="#a78bfa" opacity="0.85"/>
+                                <text x="555" y="363" text-anchor="middle" fill="white" font-size="7">📖</text>
+                            </g>
+
+                            <!-- CEBA -->
+                            <g class="resource-dot" data-name="CEBA Chiclayo" data-cat="Educación" data-desc="Centro de Educación Básica Alternativa">
+                                <circle cx="630" cy="400" r="6" fill="#a78bfa" opacity="0.8"/>
+                                <text x="630" y="403" text-anchor="middle" fill="white" font-size="7">📖</text>
+                            </g>
+
+                            <!-- I.E. Pomalca -->
+                            <g class="resource-dot" data-name="I.E. Pomalca" data-cat="Educación" data-desc="Institución Educativa del distrito de Pomalca">
+                                <circle cx="850" cy="340" r="6" fill="#6366f1" opacity="0.7"/>
+                                <text x="850" y="344" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- I.E. Tumán -->
+                            <g class="resource-dot" data-name="I.E. Tumán" data-cat="Educación" data-desc="Institución Educativa del distrito de Tumán">
+                                <circle cx="1010" cy="310" r="6" fill="#6366f1" opacity="0.65"/>
+                                <text x="1010" y="314" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- I.E. Monsefú -->
+                            <g class="resource-dot" data-name="I.E. Monsefú" data-cat="Educación" data-desc="Institución Educativa del distrito de Monsefú">
+                                <circle cx="400" cy="550" r="6" fill="#6366f1" opacity="0.7"/>
+                                <text x="400" y="554" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- I.E. Reque -->
+                            <g class="resource-dot" data-name="I.E. Reque" data-cat="Educación" data-desc="Institución Educativa del distrito de Reque">
+                                <circle cx="620" cy="570" r="6" fill="#6366f1" opacity="0.65"/>
+                                <text x="620" y="574" text-anchor="middle" fill="white" font-size="7">📚</text>
+                            </g>
+
+                            <!-- I.E. Eten -->
+                            <g class="resource-dot" data-name="I.E. Puerto Eten" data-cat="Educación" data-desc="Institución Educativa del distrito de Eten">
+                                <circle cx="440" cy="680" r="5" fill="#6366f1" opacity="0.6"/>
+                                <text x="440" y="684" text-anchor="middle" fill="white" font-size="6">📚</text>
+                            </g>
+                        </g>
+
+                        <!-- === PRODUCTIVOS / ECONÓMICOS (Ámbar/Naranja) === -->
+                        <g class="prod-layer" filter="url(#glowProd)">
+                            <!-- Mercado Modelo -->
+                            <g class="resource-dot" data-name="Mercado Modelo de Chiclayo" data-cat="Productivo/Económico" data-desc="Principal centro de abastos de la ciudad, comercio mayorista y minorista">
+                                <rect x="544" y="395" width="22" height="22" rx="5" fill="#f59e0b" opacity="0.95"/>
+                                <text x="555" y="410" text-anchor="middle" fill="white" font-size="11">🏪</text>
+                            </g>
+
+                            <!-- Mercado Moshoqueque -->
+                            <g class="resource-dot" data-name="Mercado Moshoqueque" data-cat="Productivo/Económico" data-desc="Mercado mayorista más grande del norte del Perú - Distrito JLO">
+                                <rect x="508" y="178" width="24" height="24" rx="5" fill="#f59e0b" opacity="0.95"/>
+                                <text x="520" y="194" text-anchor="middle" fill="white" font-size="12">🏪</text>
+                            </g>
+
+                            <!-- Centro Comercial Real Plaza -->
+                            <g class="resource-dot" data-name="Real Plaza Chiclayo" data-cat="Productivo/Económico" data-desc="Centro comercial moderno - Retail y entretenimiento">
+                                <rect x="470" y="390" width="22" height="22" rx="5" fill="#d97706" opacity="0.9"/>
+                                <text x="481" y="405" text-anchor="middle" fill="white" font-size="11">🏬</text>
+                            </g>
+
+                            <!-- Open Plaza -->
+                            <g class="resource-dot" data-name="Open Plaza Chiclayo" data-cat="Productivo/Económico" data-desc="Centro comercial - Zona comercial activa">
+                                <rect x="638" y="418" width="22" height="22" rx="5" fill="#d97706" opacity="0.9"/>
+                                <text x="649" y="433" text-anchor="middle" fill="white" font-size="11">🏬</text>
+                            </g>
+
+                            <!-- Zona Comercial Balta -->
+                            <g class="resource-dot" data-name="Zona Comercial Av. Balta" data-cat="Productivo/Económico" data-desc="Eje comercial principal - Tiendas, bancos, servicios">
+                                <circle cx="550" cy="420" r="7" fill="#fbbf24" opacity="0.85"/>
+                                <text x="550" y="424" text-anchor="middle" fill="#1a1a1a" font-size="8">💰</text>
+                            </g>
+
+                            <!-- Parque Industrial -->
+                            <g class="resource-dot" data-name="Parque Industrial de Chiclayo" data-cat="Productivo/Económico" data-desc="Zona industrial con empresas manufactureras y agroindustriales">
+                                <rect x="730" y="430" width="22" height="22" rx="5" fill="#ea580c" opacity="0.9"/>
+                                <text x="741" y="445" text-anchor="middle" fill="white" font-size="11">🏭</text>
+                            </g>
+
+                            <!-- Empresa Agroindustrial Pomalca -->
+                            <g class="resource-dot" data-name="Empresa Agroindustrial Pomalca" data-cat="Productivo/Económico" data-desc="Empresa azucarera - Producción agroindustrial de caña de azúcar">
+                                <rect x="858" y="358" width="24" height="24" rx="5" fill="#ea580c" opacity="0.9"/>
+                                <text x="870" y="374" text-anchor="middle" fill="white" font-size="12">🏭</text>
+                            </g>
+
+                            <!-- Empresa Agroindustrial Tumán -->
+                            <g class="resource-dot" data-name="Empresa Agroindustrial Tumán" data-cat="Productivo/Económico" data-desc="Empresa azucarera - Producción agroindustrial de caña de azúcar">
+                                <rect x="988" y="295" width="24" height="24" rx="5" fill="#ea580c" opacity="0.85"/>
+                                <text x="1000" y="311" text-anchor="middle" fill="white" font-size="12">🏭</text>
+                            </g>
+
+                            <!-- Zona Agrícola (campos de arroz) -->
+                            <g class="resource-dot" data-name="Zona Agrícola - Campos de Arroz" data-cat="Productivo/Económico" data-desc="Extensiones de cultivo de arroz - Principal actividad agrícola">
+                                <rect x="778" y="158" width="22" height="22" rx="5" fill="#65a30d" opacity="0.8"/>
+                                <text x="789" y="173" text-anchor="middle" fill="white" font-size="11">🌾</text>
+                            </g>
+
+                            <!-- Zona Agrícola Monsefú -->
+                            <g class="resource-dot" data-name="Zona Agrícola Monsefú" data-cat="Productivo/Económico" data-desc="Cultivos variados y artesanía tradicional">
+                                <rect x="340" y="578" width="20" height="20" rx="5" fill="#65a30d" opacity="0.75"/>
+                                <text x="350" y="592" text-anchor="middle" fill="white" font-size="9">🌾</text>
+                            </g>
+
+                            <!-- Emprendimientos JLO -->
+                            <g class="resource-dot" data-name="Zona de Emprendimientos - JLO" data-cat="Productivo/Económico" data-desc="Microempresas, talleres textiles y calzado en JLO">
+                                <circle cx="470" cy="195" r="6" fill="#fbbf24" opacity="0.8"/>
+                                <text x="470" y="199" text-anchor="middle" fill="#1a1a1a" font-size="7">💼</text>
+                            </g>
+
+                            <!-- Terminal Terrestre -->
+                            <g class="resource-dot" data-name="Terminal Terrestre de Chiclayo" data-cat="Productivo/Económico" data-desc="Terminal de transporte interprovincial - Conectividad regional">
+                                <rect x="430" y="440" width="20" height="20" rx="5" fill="#f59e0b" opacity="0.85"/>
+                                <text x="440" y="454" text-anchor="middle" fill="white" font-size="9">🚌</text>
+                            </g>
+
+                            <!-- Puerto Eten (pesquero) -->
+                            <g class="resource-dot" data-name="Puerto Eten - Actividad Pesquera" data-cat="Productivo/Económico" data-desc="Actividad pesquera artesanal y turismo costero">
+                                <circle cx="420" cy="700" r="6" fill="#fbbf24" opacity="0.65"/>
+                                <text x="420" y="704" text-anchor="middle" fill="#1a1a1a" font-size="7">🐟</text>
+                            </g>
+
+                            <!-- Artesanía Monsefú -->
+                            <g class="resource-dot" data-name="Centro Artesanal de Monsefú" data-cat="Productivo/Económico" data-desc="Tradición artesanal en tejidos y bordados">
+                                <circle cx="380" cy="565" r="6" fill="#fbbf24" opacity="0.7"/>
+                                <text x="380" y="569" text-anchor="middle" fill="#1a1a1a" font-size="7">🎨</text>
+                            </g>
+                        </g>
+
+                        <!-- === SALUD (Verde) === -->
+                        <g class="health-layer" filter="url(#glowHealth)">
+                            <!-- Hospital Regional -->
+                            <g class="resource-dot" data-name="Hospital Regional Lambayeque" data-cat="Salud" data-desc="Hospital de referencia regional - Nivel III">
+                                <rect x="488" y="358" width="24" height="24" rx="6" fill="#10b981" opacity="0.95"/>
+                                <text x="500" y="374" text-anchor="middle" fill="white" font-size="12">🏥</text>
+                            </g>
+
+                            <!-- Hospital Las Mercedes -->
+                            <g class="resource-dot" data-name="Hospital Las Mercedes" data-cat="Salud" data-desc="Hospital referencial de Chiclayo - Atención general">
+                                <rect x="628" y="338" width="22" height="22" rx="5" fill="#10b981" opacity="0.9"/>
+                                <text x="639" y="353" text-anchor="middle" fill="white" font-size="11">🏥</text>
+                            </g>
+
+                            <!-- Centro de Salud JLO -->
+                            <g class="resource-dot" data-name="Centro de Salud José Leonardo Ortiz" data-cat="Salud" data-desc="Establecimiento de salud de primer nivel - JLO">
+                                <circle cx="470" cy="195" r="6" fill="#10b981" opacity="0.8"/>
+                                <text x="470" y="199" text-anchor="middle" fill="white" font-size="7">➕</text>
+                            </g>
+
+                            <!-- EsSalud -->
+                            <g class="resource-dot" data-name="Hospital EsSalud Almanzor Aguinaga" data-cat="Salud" data-desc="Hospital principal de EsSalud en Chiclayo - Nivel IV">
+                                <rect x="575" y="325" width="22" height="22" rx="5" fill="#059669" opacity="0.9"/>
+                                <text x="586" y="340" text-anchor="middle" fill="white" font-size="11">🏥</text>
+                            </g>
+
+                            <!-- Posta Pimentel -->
+                            <g class="resource-dot" data-name="Posta de Salud Pimentel" data-cat="Salud" data-desc="Establecimiento de salud básico en Pimentel">
+                                <circle cx="240" cy="420" r="5" fill="#10b981" opacity="0.7"/>
+                                <text x="240" y="423" text-anchor="middle" fill="white" font-size="6">➕</text>
+                            </g>
+
+                            <!-- Posta Monsefú -->
+                            <g class="resource-dot" data-name="Centro de Salud Monsefú" data-cat="Salud" data-desc="Centro de salud del distrito de Monsefú">
+                                <circle cx="420" cy="540" r="5" fill="#10b981" opacity="0.7"/>
+                                <text x="420" y="543" text-anchor="middle" fill="white" font-size="6">➕</text>
+                            </g>
+
+                            <!-- Posta Reque -->
+                            <g class="resource-dot" data-name="Posta de Salud Reque" data-cat="Salud" data-desc="Establecimiento de salud básico en Reque">
+                                <circle cx="650" cy="590" r="5" fill="#10b981" opacity="0.6"/>
+                                <text x="650" y="593" text-anchor="middle" fill="white" font-size="6">➕</text>
+                            </g>
+
+                            <!-- Posta Pomalca -->
+                            <g class="resource-dot" data-name="Centro de Salud Pomalca" data-cat="Salud" data-desc="Centro de salud del distrito de Pomalca">
+                                <circle cx="880" cy="380" r="5" fill="#10b981" opacity="0.65"/>
+                                <text x="880" y="383" text-anchor="middle" fill="white" font-size="6">➕</text>
+                            </g>
+                        </g>
+
+                        <!-- === GOBIERNO / INSTITUCIONAL (Rojo) === -->
+                        <g class="gov-layer" filter="url(#glowGov)">
+                            <!-- Municipalidad Provincial -->
+                            <g class="resource-dot" data-name="Municipalidad Provincial de Chiclayo" data-cat="Gobierno" data-desc="Gobierno local provincial - Administración y servicios públicos">
+                                <rect x="548" y="328" width="24" height="24" rx="6" fill="#ef4444" opacity="0.95"/>
+                                <text x="560" y="344" text-anchor="middle" fill="white" font-size="12">🏛️</text>
+                            </g>
+
+                            <!-- Gobierno Regional -->
+                            <g class="resource-dot" data-name="Gobierno Regional de Lambayeque" data-cat="Gobierno" data-desc="Sede del gobierno regional - Gestión y políticas regionales">
+                                <rect x="588" y="358" width="22" height="22" rx="5" fill="#dc2626" opacity="0.9"/>
+                                <text x="599" y="373" text-anchor="middle" fill="white" font-size="11">🏛️</text>
+                            </g>
+
+                            <!-- Municipalidad JLO -->
+                            <g class="resource-dot" data-name="Municipalidad Distrital de JLO" data-cat="Gobierno" data-desc="Gobierno local del distrito José Leonardo Ortiz">
+                                <circle cx="530" cy="215" r="7" fill="#ef4444" opacity="0.85"/>
+                                <text x="530" y="219" text-anchor="middle" fill="white" font-size="8">🏛️</text>
+                            </g>
+
+                            <!-- Municipalidad La Victoria -->
+                            <g class="resource-dot" data-name="Municipalidad Distrital de La Victoria" data-cat="Gobierno" data-desc="Gobierno local del distrito La Victoria">
+                                <circle cx="680" cy="195" r="6" fill="#ef4444" opacity="0.8"/>
+                                <text x="680" y="199" text-anchor="middle" fill="white" font-size="7">🏛️</text>
+                            </g>
+
+                            <!-- Comisaría -->
+                            <g class="resource-dot" data-name="Comisaría PNP Chiclayo" data-cat="Gobierno" data-desc="Comisaría de la Policía Nacional del Perú - Seguridad ciudadana">
+                                <circle cx="500" cy="340" r="6" fill="#f87171" opacity="0.8"/>
+                                <text x="500" y="344" text-anchor="middle" fill="white" font-size="7">🚔</text>
+                            </g>
+
+                            <!-- SUNARP -->
+                            <g class="resource-dot" data-name="SUNARP Chiclayo" data-cat="Gobierno" data-desc="Superintendencia Nacional de Registros Públicos">
+                                <circle cx="650" cy="310" r="5" fill="#f87171" opacity="0.75"/>
+                                <text x="650" y="314" text-anchor="middle" fill="white" font-size="6">📋</text>
+                            </g>
+                        </g>
+
+                        <!-- ============= OCEAN / COAST INDICATOR ============= -->
+                        <g opacity="0.4">
+                            <path d="M 80,350 Q 100,340 120,350 Q 140,360 160,350" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.5"/>
+                            <path d="M 70,365 Q 90,355 110,365 Q 130,375 150,365" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.3"/>
+                            <text x="110" y="390" text-anchor="middle" font-family="Outfit" font-size="10" fill="#06b6d4" opacity="0.5" font-weight="600">OCÉANO</text>
+                            <text x="110" y="402" text-anchor="middle" font-family="Outfit" font-size="10" fill="#06b6d4" opacity="0.5" font-weight="600">PACÍFICO</text>
+                        </g>
+
+                        <!-- ============= COMPASS ROSE ============= -->
+                        <g transform="translate(1120, 720)">
+                            <circle cx="0" cy="0" r="30" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                            <line x1="0" y1="-25" x2="0" y2="-12" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+                            <line x1="0" y1="12" x2="0" y2="25" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <line x1="-25" y1="0" x2="-12" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <line x1="12" y1="0" x2="25" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                            <text x="0" y="-32" text-anchor="middle" font-family="Outfit" font-size="10" fill="rgba(255,255,255,0.5)" font-weight="700">N</text>
+                            <text x="0" y="42" text-anchor="middle" font-family="Outfit" font-size="8" fill="rgba(255,255,255,0.3)" font-weight="500">S</text>
+                            <text x="35" y="4" text-anchor="middle" font-family="Outfit" font-size="8" fill="rgba(255,255,255,0.3)" font-weight="500">E</text>
+                            <text x="-35" y="4" text-anchor="middle" font-family="Outfit" font-size="8" fill="rgba(255,255,255,0.3)" font-weight="500">O</text>
+                        </g>
+
+                        <!-- ============= SCALE BAR ============= -->
+                        <g transform="translate(50, 750)">
+                            <line x1="0" y1="0" x2="100" y2="0" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                            <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <line x1="100" y1="-4" x2="100" y2="4" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                            <text x="50" y="15" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(255,255,255,0.3)">≈ 5 km (referencial)</text>
+                        </g>
+                    </svg>
+
+                    <!-- Tooltip -->
+                    <div class="tooltip" id="tooltip">
+                        <div class="tt-title" id="ttTitle"></div>
+                        <div class="tt-cat" id="ttCat"></div>
+                        <div id="ttDesc" style="margin-top: 6px; font-size: 0.75rem; color: #94a3c4; line-height: 1.4;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="glass-card">
+            <div class="card-title">
+                <div class="icon" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));">📋</div>
+                Leyenda del Mapa
+            </div>
+            <div class="legend-grid">
+                <!-- Educación -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: var(--edu-color);"></span> Recursos Educativos</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--edu-light); color: var(--edu-color);">🎓</div>
+                        <span>Universidades (pública y privadas)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--edu-light); color: var(--edu-color);">📚</div>
+                        <span>Instituciones Educativas (primaria/secundaria)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--edu-light); color: var(--edu-color);">🏫</div>
+                        <span>UGEL (Unidad de Gestión Educativa Local)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--edu-light); color: var(--edu-color);">🔧</div>
+                        <span>Institutos técnicos (SENATI, SENCICO)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--edu-light); color: var(--edu-color);">📖</div>
+                        <span>Bibliotecas y centros de educación alternativa</span>
+                    </div>
+                </div>
+
+                <!-- Productivos -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: var(--prod-color);"></span> Recursos Productivos / Económicos</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">🏪</div>
+                        <span>Mercados (mayoristas y minoristas)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">🏬</div>
+                        <span>Centros comerciales modernos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">🏭</div>
+                        <span>Industrias y agroindustrias</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">🌾</div>
+                        <span>Zonas agrícolas (arroz, caña)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">💰💼</div>
+                        <span>Zonas comerciales y emprendimientos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--prod-light); color: var(--prod-color);">🚌🐟🎨</div>
+                        <span>Transporte, pesca y artesanía</span>
+                    </div>
+                </div>
+
+                <!-- Salud -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: var(--health-color);"></span> Recursos de Salud</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--health-light); color: var(--health-color);">🏥</div>
+                        <span>Hospitales (Regional, Las Mercedes, EsSalud)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--health-light); color: var(--health-color);">➕</div>
+                        <span>Centros y postas de salud</span>
+                    </div>
+                </div>
+
+                <!-- Gobierno -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: var(--gov-color);"></span> Instituciones Gubernamentales</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--gov-light); color: var(--gov-color);">🏛️</div>
+                        <span>Municipalidades y Gobierno Regional</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: var(--gov-light); color: var(--gov-color);">🚔📋</div>
+                        <span>Comisarías, SUNARP y servicios públicos</span>
+                    </div>
+                </div>
+
+                <!-- Zonas -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: linear-gradient(135deg, var(--accent-green), var(--accent-red));"></span> Indicadores de Zona</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(16,185,129,0.15); border: 1px dashed #10b981;">◯</div>
+                        <span style="color: #10b981;">Alta concentración de recursos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(245,158,11,0.15); border: 1px dashed #f59e0b;">◯</div>
+                        <span style="color: #f59e0b;">Concentración media de recursos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(239,68,68,0.15); border: 1px dashed #ef4444;">◯</div>
+                        <span style="color: #ef4444;">Baja concentración / Carencia</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(99,102,241,0.15); border: 1px dashed #6366f1;">◯</div>
+                        <span style="color: #6366f1;">Polo universitario / especializado</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(6,182,212,0.1);">- - →</div>
+                        <span>Líneas de articulación / conexión</span>
+                    </div>
+                </div>
+
+                <!-- Vías -->
+                <div class="legend-category">
+                    <h3><span class="dot" style="background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));"></span> Infraestructura Vial</h3>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(255,255,255,0.08);">━</div>
+                        <span>Vía principal (Panamericana Norte)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(255,255,255,0.05);">─</div>
+                        <span>Avenidas principales</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="symbol" style="background: rgba(255,255,255,0.05);">┈</div>
+                        <span>Límites distritales (líneas punteadas)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone Analysis -->
+        <div class="glass-card">
+            <div class="card-title">
+                <div class="icon" style="background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));">📊</div>
+                Análisis por Zonas
+            </div>
+            <div class="zone-grid">
+                <div class="zone-card high-resource">
+                    <h4>🟢 Chiclayo Centro</h4>
+                    <span class="zone-tag">Alta Concentración</span>
+                    <p>
+                        Concentra la mayor cantidad de recursos: universidades (UNPRG, USAT, UDCH), 
+                        hospitales (Regional, Las Mercedes, EsSalud), mercados, centros comerciales, 
+                        instituciones gubernamentales y la UGEL. Es el nodo articulador principal 
+                        de toda la provincia.
+                    </p>
+                </div>
+
+                <div class="zone-card medium-resource">
+                    <h4>🟡 José Leonardo Ortiz</h4>
+                    <span class="zone-tag">Concentración Media</span>
+                    <p>
+                        Destacan los recursos económicos como el Mercado Moshoqueque (el más grande del norte), 
+                        emprendimientos textiles y de calzado. Presenta instituciones educativas pero con 
+                        necesidad de mayor inversión en salud y equipamiento educativo.
+                    </p>
+                </div>
+
+                <div class="zone-card medium-resource">
+                    <h4>🟡 La Victoria</h4>
+                    <span class="zone-tag">Concentración Media</span>
+                    <p>
+                        Distrito en crecimiento con recursos educativos y municipales presentes. 
+                        Requiere mayor presencia de servicios de salud especializados y 
+                        oportunidades productivas formales para la población.
+                    </p>
+                </div>
+
+                <div class="zone-card high-resource">
+                    <h4>🔵 Pimentel (Polo Universitario)</h4>
+                    <span class="zone-tag">Polo Educativo</span>
+                    <p>
+                        Se ha consolidado como un polo universitario con la presencia de la USS y UCV. 
+                        Potencial de articulación universidad-empresa para desarrollo de la zona costera. 
+                        Necesita mayor desarrollo de servicios complementarios.
+                    </p>
+                </div>
+
+                <div class="zone-card medium-resource">
+                    <h4>🟡 Pomalca y Tumán</h4>
+                    <span class="zone-tag">Concentración Media-Baja</span>
+                    <p>
+                        Zonas con vocación agroindustrial (caña de azúcar). Cuentan con empresas 
+                        agroindustriales importantes pero limitados recursos educativos y de salud. 
+                        Oportunidad de articulación con institutos técnicos de Chiclayo.
+                    </p>
+                </div>
+
+                <div class="zone-card low-resource">
+                    <h4>🔴 Oyotún / Zonas Rurales</h4>
+                    <span class="zone-tag">Baja Concentración</span>
+                    <p>
+                        Zonas con significativa carencia de recursos educativos, de salud y productivos 
+                        formales. Limitada conectividad con el centro urbano. Requieren políticas 
+                        de descentralización y mayor inversión pública.
+                    </p>
+                </div>
+
+                <div class="zone-card low-resource">
+                    <h4>🔴 Eten / Puerto Eten</h4>
+                    <span class="zone-tag">Baja Concentración</span>
+                    <p>
+                        Actividad pesquera artesanal con limitados recursos educativos y de salud. 
+                        Potencial turístico no explotado. Necesita conexión con programas de 
+                        formación técnica y apoyo al emprendimiento local.
+                    </p>
+                </div>
+
+                <div class="zone-card medium-resource">
+                    <h4>🟡 Monsefú</h4>
+                    <span class="zone-tag">Concentración Media</span>
+                    <p>
+                        Rica tradición artesanal y gastronómica. Presenta recursos agrícolas y 
+                        artesanales que pueden articularse con programas de emprendimiento y 
+                        turismo. Requiere mejor infraestructura educativa y sanitaria.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connections / Articulations -->
+        <div class="glass-card">
+            <div class="card-title">
+                <div class="icon" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">🔗</div>
+                Articulación entre Instituciones y Recursos
+            </div>
+            <div class="connections-list">
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--edu-light); color: var(--edu-color);">UGEL Chiclayo</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--edu-light); color: var(--edu-color);">Instituciones Educativas</span>
+                    <span class="conn-desc">Supervisión, gestión pedagógica</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--edu-light); color: var(--edu-color);">Universidades</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--prod-light); color: var(--prod-color);">Empresas / Industrias</span>
+                    <span class="conn-desc">Investigación, prácticas, extensión</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--gov-light); color: var(--gov-color);">Municipalidad</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--edu-light); color: var(--edu-color);">UGEL</span>
+                    <span class="conn-desc">Coordinación de políticas educativas</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--health-light); color: var(--health-color);">Hospital Regional</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--health-light); color: var(--health-color);">Centros de Salud</span>
+                    <span class="conn-desc">Red de referencia y contra-referencia</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--prod-light); color: var(--prod-color);">Mercado Moshoqueque</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--prod-light); color: var(--prod-color);">Zonas Agrícolas</span>
+                    <span class="conn-desc">Cadena de abastecimiento</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--edu-light); color: var(--edu-color);">SENATI / SENCICO</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--prod-light); color: var(--prod-color);">Parque Industrial</span>
+                    <span class="conn-desc">Formación técnica para industria</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--gov-light); color: var(--gov-color);">Gobierno Regional</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--prod-light); color: var(--prod-color);">Agroindustrias</span>
+                    <span class="conn-desc">Políticas de desarrollo productivo</span>
+                </div>
+                <div class="connection-item">
+                    <span class="conn-from" style="background: var(--edu-light); color: var(--edu-color);">USS / UCV (Pimentel)</span>
+                    <span class="conn-arrow">⟷</span>
+                    <span class="conn-to" style="background: var(--prod-light); color: var(--prod-color);">Emprendimientos</span>
+                    <span class="conn-desc">Incubadoras y transferencia</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusions -->
+        <div class="glass-card">
+            <div class="card-title">
+                <div class="icon" style="background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));">💡</div>
+                Conclusiones y Oportunidades
+            </div>
+            <div class="zone-grid">
+                <div class="zone-card high-resource">
+                    <h4>Fortalezas Identificadas</h4>
+                    <span class="zone-tag">Oportunidades</span>
+                    <p>
+                        • Concentración de universidades y centros de investigación<br>
+                        • Red hospitalaria de referencia regional<br>
+                        • Mercado Moshoqueque como hub comercial del norte<br>
+                        • Potencial agroindustrial en Pomalca y Tumán<br>
+                        • Polo universitario en crecimiento en Pimentel
+                    </p>
+                </div>
+                <div class="zone-card low-resource">
+                    <h4>Necesidades Detectadas</h4>
+                    <span class="zone-tag">Carencias</span>
+                    <p>
+                        • Déficit de servicios de salud en zonas periféricas<br>
+                        • Limitada presencia educativa superior en distritos rurales<br>
+                        • Falta de articulación universidad-empresa-gobierno<br>
+                        • Baja formalización de emprendimientos en JLO<br>
+                        • Infraestructura vial deficiente en zonas alejadas
+                    </p>
+                </div>
+                <div class="zone-card medium-resource">
+                    <h4>Propuestas de Articulación</h4>
+                    <span class="zone-tag">Recomendaciones</span>
+                    <p>
+                        • Crear mesas de diálogo UGEL-Universidades-Empresas<br>
+                        • Implementar programas de extensión universitaria rural<br>
+                        • Fortalecer la cadena productiva agrícola con formación técnica<br>
+                        • Descentralizar servicios de salud hacia Eten, Oyotún y Reque<br>
+                        • Impulsar turismo y artesanía como actividad económica formal
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="divider"></div>
+            <p><strong>Mapa de Recursos — Provincia de Chiclayo</strong></p>
+            <p>Análisis territorial para la identificación de recursos educativos y productivos/económicos</p>
+            <p style="margin-top: 8px; opacity: 0.6;">Región Lambayeque, Perú — 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        const ttTitle = document.getElementById('ttTitle');
+        const ttCat = document.getElementById('ttCat');
+        const ttDesc = document.getElementById('ttDesc');
+
+        document.querySelectorAll('.resource-dot').forEach(dot => {
+            dot.addEventListener('mouseenter', (e) => {
+                const name = dot.dataset.name;
+                const cat = dot.dataset.cat;
+                const desc = dot.dataset.desc;
+                
+                ttTitle.textContent = name;
+                ttCat.textContent = cat;
+                ttDesc.textContent = desc;
+
+                tooltip.classList.add('visible');
+            });
+
+            dot.addEventListener('mousemove', (e) => {
+                const mapWrapper = document.querySelector('.map-wrapper');
+                const rect = mapWrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left + 15;
+                const y = e.clientY - rect.top - 10;
+                
+                tooltip.style.left = x + 'px';
+                tooltip.style.top = y + 'px';
+            });
+
+            dot.addEventListener('mouseleave', () => {
+                tooltip.classList.remove('visible');
+            });
+        });
+
+        // Layer toggle functionality
+        const layers = {
+            edu: true,
+            prod: true,
+            health: true,
+            gov: true,
+            connections: true,
+            zones: true
+        };
+
+        function toggleLayer(layer, btn) {
+            if (layer === 'all') {
+                const allActive = Object.values(layers).every(v => v);
+                const newState = !allActive;
+                Object.keys(layers).forEach(k => layers[k] = newState);
+                
+                document.querySelectorAll('.map-btn').forEach(b => {
+                    if (b !== btn) b.classList.toggle('active', newState);
+                });
+                btn.classList.add('active');
+            } else {
+                layers[layer] = !layers[layer];
+                btn.classList.toggle('active');
+            }
+
+            // Apply visibility
+            document.querySelectorAll('.edu-layer').forEach(el => el.style.display = layers.edu ? '' : 'none');
+            document.querySelectorAll('.prod-layer').forEach(el => el.style.display = layers.prod ? '' : 'none');
+            document.querySelectorAll('.health-layer').forEach(el => el.style.display = layers.health ? '' : 'none');
+            document.querySelectorAll('.gov-layer').forEach(el => el.style.display = layers.gov ? '' : 'none');
+            document.querySelectorAll('.connections-layer').forEach(el => el.style.display = layers.connections ? '' : 'none');
+            document.querySelectorAll('.zones-layer').forEach(el => el.style.display = layers.zones ? '' : 'none');
+        }
+
+        // Add subtle animation to resource dots
+        document.querySelectorAll('.resource-dot circle, .resource-dot rect').forEach((el, i) => {
+            el.style.animation = `none`;
+        });
+
+        // Smooth scroll for any internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
